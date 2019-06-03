@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/denisprado/calcTeses#readme",
   "dependencies": {
-    "jquery": "^3.3.1"
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
-    "surge": "^0.20.1"
+    "surge": "^0.21.1"
   }
 }
