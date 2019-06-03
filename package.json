@@ -1,0 +1,31 @@
+{
+  "name": "calculadora-teses",
+  "version": "1.0.0",
+  "description": "Calculadora dos valores de impressão de teses da Unicamp",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "surge": "surge ./ calc-teses.surge.sh",
+    "list": "surge list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denisprado/calcTeses.git"
+  },
+  "keywords": [
+    "Teses",
+    "Unicamp"
+  ],
+  "author": "Denis Forigo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denisprado/calcTeses/issues"
+  },
+  "homepage": "https://github.com/denisprado/calcTeses#readme",
+  "dependencies": {
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "surge": "^0.20.1"
+  }
+}

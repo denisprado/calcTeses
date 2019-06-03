@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculadora de Teses</title>
+    <!-- production version, optimized for size and speed -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app-calc" class="border m-4 p-4">
+        <form>
+            <div class="row mb-4">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Serviço: </label>
+                <div class="col-sm-8">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" v-model="fullPress" v-bind:value="true"
+                            checked>
+                        <label class="form-check-label" for="exampleRadios1">Impressão completa</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" v-model="fullPress" v-bind:value="false">
+                        <label class="form-check-label" for="exampleRadios2">Somente encadernamento</label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <label for="inputPassword3" class="col-form-label" data-toggle="tooltip" data-placement="bottom" title="Quantas teses ou dissertações serão impressas?">Unidades impressas: </label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control form-control-lg" aria-label="Unidades" min="1" v-model="units">
+                    </div>
+                    <div class="col-sm-2">
+                        <p class="m-0" v-if="units">
+                            <code>{{units}}unid. x R${{priceCover}}
+                                <br>Subtotal: R${{ units * priceCover }}</code>
+                        </p>
+                    </div>
+                </div>
+                <div v-if="fullPress">
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <label for="inputPassword3" class="col-form-label">Páginas
+                                <span class="text-white bg-dark">Preto e Branco</span>: </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control form-control-lg" v-model="pagesBW" min="1" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <p class="m-0" v-if="pagesBW">
+                                <code>{{units}}unid. x {{pagesBW}}p. x <span data-toggle="tooltip" data-placement="right" title="Custo unitário da impressão P&B">R${{pricePagesBW}}</span>
+                                    <br>Subtotal: R${{calcPB}}</code>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <label for="inputPassword3" class="col-form-label">Páginas
+                                <span class="text-white">
+                                    <span class="bg-danger">Col</span><span class="bg-success">ori</span><span class="bg-info">das</span>
+                                </span>: </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control form-control-lg" min="0" v-model="pagesColor">
+                        </div>
+                        <div class="col-sm-2">
+
+                            <p class="m-0" v-if="pagesColor">
+                                <code>{{units}}unid. x {{pagesColor}}p. x <span data-toggle="tooltip" data-placement="right" title="Custo unitário da impressão colorida">R${{pricePagesColor}}</span>
+                                    <br>Subtotal: R${{calcColor}}</code>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+
+                    <label for="inputPassword3" class="col-form-label d-block">
+                        <b>Valor Total: </b>
+                    </label>
+                    <code v-if="units">Valor unitário: R${{calcUnit}}</code>
+                </div>
+                <h1 class="col-sm-4 display-4">
+                    R${{calc}}
+                </h1>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        var appCalc = new Vue({
+            el: "#app-calc",
+            data: {
+                units: 1,
+                fullPress: true,
+                pagesBW: 1,
+                pagesColor: 0,
+                pricePagesBW: 0.07,
+                pricePagesColor: 0.491,
+                priceCover: 3
+            },
+            computed: {
+                calc: function () {
+                    if (this.fullPress) {
+                        this.priceCover = 3;
+                        calcValue = (this.units * this.priceCover +
+                            this.units * this.pagesBW * this.pricePagesBW +
+                            this.units * this.pagesColor * this.pricePagesColor
+                        ).toFixed(2);
+                        if (calcValue >= 0) {
+                            return calcValue;
+                        } else {
+                            return "Não é possível imprimir menos de uma unidade";
+                        }
+                    } else {
+                        this.priceCover = 5;
+                        this.pagesBW = 0;
+                        this.pagesColor = 0;
+
+                        return (this.units * this.priceCover).toFixed(2);
+                    }
+                },
+                calcUnit: function () {
+                    return (this.calc / this.units).toFixed(2);
+                },
+                calcPB: function () {
+                    return (this.units * this.pagesBW * this.pricePagesBW).toFixed(2);
+                },
+                calcColor: function () {
+                    return (this.units * this.pagesColor * this.pricePagesColor).toFixed(2);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
